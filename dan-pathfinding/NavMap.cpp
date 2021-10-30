@@ -1,0 +1,59 @@
+#include "NavMap.h"
+
+
+NavMap::NavMap(int width, int height)
+{
+	m_Width = width;
+	m_Height = height;
+
+	// Create grid.
+	for (int i = 0; i < width; i++)
+	{
+		m_Grid.push_back(std::vector<Node*>());
+		for (int j = 0; j < height; j++)
+		{
+			Node* newNode = new Node(i, j);
+			m_Grid[i].push_back(newNode);
+		}
+	}
+}
+
+/// <summary>
+/// This functions connects nodes in the graph. Connecting nodes is a two way thing, so if node A connects to node B, now node A has a reference to node B
+/// and node B has a reference to node A.
+/// </summary>
+void NavMap::ConnectNodes()
+{
+	for (int i = 0; i < m_Width; i++)
+	{
+		for (int j = 0; j < m_Height; j++)
+		{
+			if (i != 0 && i != m_Width)
+			{
+				// We have a right connection to add.
+				Node* otherNode = m_Grid[i + 1][j];
+				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]); // Giving the other node a reference to this node.
+			}
+			if (j != m_Height)
+			{
+				// We have a connection below us to add.
+				Node* otherNode = m_Grid[i][j + 1];
+				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
+			}
+			if (j != 0 && i != m_Width)
+			{
+				// We have a diagonal top-right connection.
+				Node* otherNode = m_Grid[i + 1][j - 1];
+				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
+			}
+			if (i != m_Width && j != m_Height)
+			{
+				// We have a diagonal connection bottom-right of us.
+				Node* other
+			}
+		}
+	}
+}
