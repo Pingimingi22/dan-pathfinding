@@ -1,6 +1,6 @@
 #include "Dijkstra.h"
 #include <algorithm>
-Node* Dijkstra::GetShortestPath(Node* start, Node* destination)
+std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 {
 	std::vector<Node*> open;
 	std::vector<Node*> closed;
@@ -57,9 +57,19 @@ Node* Dijkstra::GetShortestPath(Node* start, Node* destination)
 	}
 
 
+	// Get the path and return it.
+	std::vector<Node*> path;
+	Node* currentNode = destination;
+	path.push_back(currentNode);
+	while (currentNode->m_Previous)
+	{
+		currentNode = currentNode->m_Previous;
+		path.insert(path.begin(), currentNode); // Adding it to the front of the container since we're are going through the path backwards by using m_Previous.
+	}
 
-	// If this returns a nullptr, it means we couldn't find a path to the destination node.
-	return nullptr;
+	return path;
+
+	// It will return a path of 1 if it failed. A path of 1 because it will always add the destination node to the path.
 }
 
 bool Dijkstra::CheckIfInList(Node* node, std::vector<Node*> list)

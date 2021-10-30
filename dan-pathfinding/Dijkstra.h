@@ -9,7 +9,7 @@
 static class Dijkstra
 {
 public:
-	Node* GetShortestPath(Node* start, Node* destination);
+	std::vector<Node*> GetShortestPath(Node* start, Node* destination);
 	bool CheckIfInList(Node* node, std::vector<Node*> list);
 
 };
