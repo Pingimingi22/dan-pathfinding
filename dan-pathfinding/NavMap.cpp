@@ -16,11 +16,16 @@ NavMap::NavMap(int width, int height)
 			m_Grid[i].push_back(newNode);
 		}
 	}
+
+	// After filling out the 2D std::vector with nodes, it's time to connect them.
+	ConnectNodes();
 }
 
 /// <summary>
 /// This functions connects nodes in the graph. Connecting nodes is a two way thing, so if node A connects to node B, now node A has a reference to node B
 /// and node B has a reference to node A.
+/// The idea behind this connection algorith is to connect the nodes to the right, bottom, diagonal top right and diagonal bottom right. If done
+/// to the entire grid, all nodes should be connected 8 ways.
 /// </summary>
 void NavMap::ConnectNodes()
 {
@@ -52,7 +57,9 @@ void NavMap::ConnectNodes()
 			if (i != m_Width && j != m_Height)
 			{
 				// We have a diagonal connection bottom-right of us.
-				Node* other
+				Node* otherNode = m_Grid[i + 1][j + 1];
+				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
 		}
 	}
