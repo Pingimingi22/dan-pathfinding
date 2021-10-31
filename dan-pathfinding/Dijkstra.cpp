@@ -21,9 +21,9 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 		{
 			Node* connectedNode = currentNode->m_ConnectedNodes[i];
 
-			if (CheckIfInList(connectedNode, closed))
+			if (CheckIfInList(connectedNode, closed) || !connectedNode->m_Passable)
 			{
-				continue; // Do nothing because this node has already been closed.
+				continue; // Do nothing because this node has already been closed or the node is inpassable.
 			}
 
 			// If the node is already in the open list, we will only update it's gScore and previous if the gScore is better than the previous gScore.
@@ -44,6 +44,15 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 					continue;
 				}
 			}
+			else
+			{
+				// Otherwise, the node is not in the open list so just set the gScore and previous.
+				// This way is cheaper, so lets set the gScore and previous according to this cheaper route.
+				connectedNode->ResetPrevious();
+				connectedNode->ResetGScore(); // Reset old g score.
+				connectedNode->m_GScore = connectedNode->m_Cost + currentNode->m_GScore; // Adding GScore to connected node based on cost.
+				connectedNode->m_Previous = currentNode;
+			}
 
 			open.push_back(connectedNode); // Adding connected to the open list for processing.
 		}
@@ -59,12 +68,12 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 
 	// Get the path and return it.
 	std::vector<Node*> path;
-	Node* currentNode = destination;
-	path.push_back(currentNode);
-	while (currentNode->m_Previous)
+	Node* currentPathNode = destination;
+	path.push_back(currentPathNode);
+	while (currentPathNode->m_Previous)
 	{
-		currentNode = currentNode->m_Previous;
-		path.insert(path.begin(), currentNode); // Adding it to the front of the container since we're are going through the path backwards by using m_Previous.
+		currentPathNode = currentPathNode->m_Previous;
+		path.insert(path.begin(), currentPathNode); // Adding it to the front of the container since we're are going through the path backwards by using m_Previous.
 	}
 
 	return path;

@@ -11,6 +11,8 @@ public:
 	int m_XIndex = 0;
 	int m_YIndex = 0;
 
+	bool m_Passable = true;
+
 
 	// Dijkstra internal searching stuff.
 	Node* m_Previous;
@@ -22,7 +24,7 @@ public:
 	void ResetGScore(); // Helper function for pathfinding.
 	void ResetPrevious(); // helper function for pathfinding.
 	bool Compare(Node* otherNode);
-	
+	void SetPassable(bool toggle);
 	
 
 };

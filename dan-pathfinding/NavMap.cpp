@@ -33,28 +33,28 @@ void NavMap::ConnectNodes()
 	{
 		for (int j = 0; j < m_Height; j++)
 		{
-			if (i != 0 && i != m_Width)
+			if (i != 0 && i != m_Width - 1)
 			{
 				// We have a right connection to add.
 				Node* otherNode = m_Grid[i + 1][j];
 				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
 				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]); // Giving the other node a reference to this node.
 			}
-			if (j != m_Height)
+			if (j != m_Height - 1)
 			{
 				// We have a connection below us to add.
 				Node* otherNode = m_Grid[i][j + 1];
 				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
 				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
-			if (j != 0 && i != m_Width)
+			if (j != 0 && i != m_Width - 1)
 			{
 				// We have a diagonal top-right connection.
 				Node* otherNode = m_Grid[i + 1][j - 1];
 				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
 				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
-			if (i != m_Width && j != m_Height)
+			if (i != m_Width - 1 && j != m_Height - 1)
 			{
 				// We have a diagonal connection bottom-right of us.
 				Node* otherNode = m_Grid[i + 1][j + 1];

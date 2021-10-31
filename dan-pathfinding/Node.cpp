@@ -24,3 +24,8 @@ bool Node::Compare(Node* otherNode)
 {
 	return(m_XIndex == otherNode->m_XIndex && m_YIndex == otherNode->m_YIndex);
 }
+
+void Node::SetPassable(bool toggle)
+{
+	m_Passable = toggle;
+}
