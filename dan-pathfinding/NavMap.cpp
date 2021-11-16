@@ -37,29 +37,52 @@ void NavMap::ConnectNodes()
 			{
 				// We have a right connection to add.
 				Node* otherNode = m_Grid[i + 1][j];
-				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
-				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]); // Giving the other node a reference to this node.
+
+				if (!m_Grid[i][j]->CheckIfConnected(otherNode))
+				{
+					m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				}
+				if(!otherNode->CheckIfConnected(m_Grid[i][j]))
+					otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]); // Giving the other node a reference to this node.
 			}
 			if (j != m_Height - 1)
 			{
 				// We have a connection below us to add.
 				Node* otherNode = m_Grid[i][j + 1];
-				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
-				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
+
+				if (!m_Grid[i][j]->CheckIfConnected(otherNode))
+				{
+					m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				}
+
+				if(!otherNode->CheckIfConnected(m_Grid[i][j]))
+					otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
 			if (j != 0 && i != m_Width - 1)
 			{
 				// We have a diagonal top-right connection.
 				Node* otherNode = m_Grid[i + 1][j - 1];
-				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
-				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
+
+				if (!m_Grid[i][j]->CheckIfConnected(otherNode))
+				{
+					m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				}
+
+				if(!otherNode->CheckIfConnected(m_Grid[i][j]))
+					otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
 			if (i != m_Width - 1 && j != m_Height - 1)
 			{
 				// We have a diagonal connection bottom-right of us.
 				Node* otherNode = m_Grid[i + 1][j + 1];
-				m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
-				otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
+
+				if (!m_Grid[i][j]->CheckIfConnected(otherNode))
+				{
+					m_Grid[i][j]->m_ConnectedNodes.push_back(otherNode);
+				}
+
+				if(!otherNode->CheckIfConnected(m_Grid[i][j]))
+					otherNode->m_ConnectedNodes.push_back(m_Grid[i][j]);
 			}
 		}
 	}

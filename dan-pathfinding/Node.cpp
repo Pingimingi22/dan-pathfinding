@@ -29,3 +29,13 @@ void Node::SetPassable(bool toggle)
 {
 	m_Passable = toggle;
 }
+
+bool Node::CheckIfConnected(Node* node)
+{
+	for (int i = 0; i < m_ConnectedNodes.size(); i++)
+	{
+		if (m_ConnectedNodes[i] == node)
+			return true;
+	}
+	return false;
+}

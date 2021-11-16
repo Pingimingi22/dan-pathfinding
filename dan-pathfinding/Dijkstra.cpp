@@ -9,7 +9,7 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 
 	Node* currentNode = open[0]; // Current node is the first node in the open list.
 	currentNode->ResetGScore();
-
+	currentNode->ResetPrevious();
 
 	while (open.size() > 0) // While the open list is not empty, we have some Dijkstra search to do!
 	{
@@ -20,6 +20,12 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 		for (int i = 0; i < currentNode->m_ConnectedNodes.size(); i++)
 		{
 			Node* connectedNode = currentNode->m_ConnectedNodes[i];
+			// Making diagonals more expensive.
+			if (connectedNode->m_XIndex != currentNode->m_XIndex && connectedNode->m_YIndex != currentNode->m_YIndex) // diagonals more expensive.
+				connectedNode->m_Cost = 1.141f;
+			else
+				connectedNode->m_Cost = 1;
+
 
 			if (CheckIfInList(connectedNode, closed) || !connectedNode->m_Passable)
 			{
@@ -29,11 +35,12 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 			// If the node is already in the open list, we will only update it's gScore and previous if the gScore is better than the previous gScore.
 			if (CheckIfInList(connectedNode, open))
 			{
-				if (connectedNode->m_GScore < currentNode->m_GScore + connectedNode->m_Cost)
+			
+				if (connectedNode->m_GScore > currentNode->m_GScore + connectedNode->m_Cost)
 				{
 					// This way is cheaper, so lets set the gScore and previous according to this cheaper route.
 					connectedNode->ResetPrevious();
-					connectedNode->ResetGScore(); // Reset old g score.
+					//connectedNode->ResetGScore(); // Reset old g score.
 					connectedNode->m_GScore = connectedNode->m_Cost + currentNode->m_GScore; // Adding GScore to connected node based on cost.
 					connectedNode->m_Previous = currentNode;
 				}
@@ -49,7 +56,7 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 				// Otherwise, the node is not in the open list so just set the gScore and previous.
 				// This way is cheaper, so lets set the gScore and previous according to this cheaper route.
 				connectedNode->ResetPrevious();
-				connectedNode->ResetGScore(); // Reset old g score.
+				//connectedNode->ResetGScore(); // Reset old g score.
 				connectedNode->m_GScore = connectedNode->m_Cost + currentNode->m_GScore; // Adding GScore to connected node based on cost.
 				connectedNode->m_Previous = currentNode;
 			}
@@ -58,7 +65,7 @@ std::vector<Node*> Dijkstra::GetShortestPath(Node* start, Node* destination)
 		}
 
 		// Sort open list so that node with lowest G score is first.
-		std::sort(open.begin(), open.end(), [](Node* first, Node* second) {return first->m_GScore > second->m_GScore; });
+		std::sort(open.begin(), open.end(), [](Node* first, Node* second) {return first->m_GScore < second->m_GScore; });
 
 		if (open.size() > 0) // If we still have anything in the open list, set current node to it.
 			currentNode = open[0];
