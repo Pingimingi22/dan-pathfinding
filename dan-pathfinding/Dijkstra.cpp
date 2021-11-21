@@ -104,7 +104,7 @@ bool Dijkstra::CheckIfInList(Node* node, std::vector<Node*> list)
 	return false;
 }
 
-std::vector<Node*> Dijkstra::GetNodesUnderGScore(float maxGScore, Node* start)
+std::vector<Node*> Dijkstra::GetNodesUnderGScore(float maxGScore, Node* start, bool ignorePassability)
 {
 	std::vector<Node*> open;
 	std::vector<Node*> closed;
@@ -130,9 +130,14 @@ std::vector<Node*> Dijkstra::GetNodesUnderGScore(float maxGScore, Node* start)
 			else
 				connectedNode->m_Cost = 1;
 
-			if (CheckIfInList(connectedNode, closed) || !connectedNode->m_Passable)
+			if (CheckIfInList(connectedNode, closed)/* || !connectedNode->m_Passable*/)
 			{
-				continue; // Do nothing because this node has already been closed or the node is inpassable.
+				continue;
+			}
+			if (ignorePassability == false)
+			{
+				if (!connectedNode->m_Passable)
+					continue; // Do nothing because this node has already been closed or the node is inpassable.
 			}
 
 			// If the node is already in the open list, we will only update it's gScore and previous if the gScore is better than the previous gScore.
